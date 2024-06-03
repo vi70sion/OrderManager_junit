@@ -24,7 +24,6 @@ public class OrderManagerImplTest {
         Order order = new Order(1,"101",120.50, "paid");
         //Execute
         ordManager.addOrder(order);
-        System.out.println();
         //Assert
         assertEquals(order, ordManager.getOrderById(1));
     }
@@ -126,7 +125,111 @@ public class OrderManagerImplTest {
     }
 
     //double calculateTotalRevenue();
+    @Test
+    public void calculateTotalRevenue_calculateTwoOrdersAmountSum(){
+        //Setup
+        Order order1 = new Order(1,"101",120.50, "paid");
+        Order order2 = new Order(2,"102",49.00, "paid");
+        double expValue = 169.50;
+        //Execute
+        ordManager.addOrder(order1);
+        ordManager.addOrder(order2);
+        //Assert
+        assertEquals(expValue, ordManager.calculateTotalRevenue());
+    }
 
+    //boolean updateOrderStatus(int orderId, String status)
+    @Test
+    public void updateOrderStatus_testUpdateOrderId2StatusToUnpaidGetTrue(){
+        //Setup
+        Order order1 = new Order(1,"101",120.50, "paid");
+        Order order2 = new Order(2,"102",49.00, "paid");
+        boolean expBool = true;
+        //Execute
+        ordManager.addOrder(order1);
+        ordManager.addOrder(order2);
+        //Assert
+        assertEquals(expBool, ordManager.updateOrderStatus(2, "unpaid"));
+    }
 
+    @Test
+    public void updateOrderStatus_TryUpdateNonExistingOrderId3GetFalse(){
+        //Setup
+        Order order1 = new Order(1,"101",120.50, "paid");
+        Order order2 = new Order(2,"102",49.00, "paid");
+        boolean expBool = false;
+        //Execute
+        ordManager.addOrder(order1);
+        ordManager.addOrder(order2);
+        //Assert
+        assertEquals(expBool, ordManager.updateOrderStatus(3, "unpaid"));
+    }
 
+    //List<Order> filterOrdersByStatus(String status)
+    @Test
+    public void filterOrdersByStatus_AddOrdersWithStatusPaidToListGetListWithOrders(){
+        //Setup
+        List<Order> orderList = new ArrayList<>();
+        Order order1 = new Order(1,"101",120.50, "paid");
+        Order order2 = new Order(2,"102",49.00, "paid");
+        Order order3 = new Order(3,"103",19.00, "unpaid");
+        orderList.add(order1);
+        orderList.add(order2);
+        //Execute
+        ordManager.addOrder(order1);
+        ordManager.addOrder(order2);
+        ordManager.addOrder(order3);
+        //Assert
+        assertEquals(orderList, ordManager.filterOrdersByStatus("paid"));
+    }
+
+    @Test
+    public void filterOrdersByStatus_AddOrdersToListGetEmptyListByNonExistingStatus(){
+        //Setup
+        List<Order> orderList = new ArrayList<>();
+        Order order1 = new Order(1,"101",120.50, "paid");
+        Order order2 = new Order(2,"102",49.00, "paid");
+        Order order3 = new Order(3,"103",19.00, "unpaid");
+        //Execute
+        ordManager.addOrder(order1);
+        ordManager.addOrder(order2);
+        ordManager.addOrder(order3);
+        //Assert
+        assertEquals(orderList, ordManager.filterOrdersByStatus("preordered"));
+    }
+
+    //List<Order> getOrdersAboveCertainValue(double value)
+    @Test
+    public void getOrdersAboveCertainValue_AddOrdersToListGetOrdersListWithAmountAbove30(){
+        //Setup
+        List<Order> orderList = new ArrayList<>();
+        Order order1 = new Order(1,"101",120.50, "paid");
+        Order order2 = new Order(2,"102",49.00, "paid");
+        Order order3 = new Order(3,"103",19.00, "unpaid");
+        orderList.add(order1);
+        orderList.add(order2);
+        double amountAbove = 30.00;
+        //Execute
+        ordManager.addOrder(order1);
+        ordManager.addOrder(order2);
+        ordManager.addOrder(order3);
+        //Assert
+        assertEquals(orderList, ordManager.getOrdersAboveCertainValue(amountAbove));
+    }
+
+    @Test
+    public void getOrdersAboveCertainValue_addOrdersToListGetEmptyListWhanCertainValueAbove130(){
+        //Setup
+        List<Order> orderList = new ArrayList<>();
+        Order order1 = new Order(1,"101",120.50, "paid");
+        Order order2 = new Order(2,"102",49.00, "paid");
+        Order order3 = new Order(3,"103",19.00, "unpaid");
+        double amountAbove = 130.00;
+        //Execute
+        ordManager.addOrder(order1);
+        ordManager.addOrder(order2);
+        ordManager.addOrder(order3);
+        //Assert
+        assertEquals(orderList, ordManager.getOrdersAboveCertainValue(amountAbove));
+    }
 }

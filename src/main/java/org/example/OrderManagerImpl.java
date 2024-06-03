@@ -13,7 +13,11 @@ public class OrderManagerImpl implements OrderManager {
 
     @Override
     public void addOrder(Order order) {
-        if (orders.stream().noneMatch(o -> o.getId() == order.getId())) orders.add(order);
+        try {
+            if (orders.stream().noneMatch(o -> o.getId() == order.getId())) orders.add(order);
+        } catch (NullPointerException e){
+            return;
+        }
     }
 
     @Override
